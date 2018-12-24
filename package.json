@@ -4,5 +4,8 @@
   "description": "testo descripto",
   "main": "bot.js",
   "author": "saarkgit",
-  "dependencies": {}
+  "dependencies": {
+    "discord.io": "^2.5.3",
+    "winston": "^2.4.3" //"3.1.0"
+  }
 }
