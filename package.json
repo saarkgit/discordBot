@@ -1,0 +1,8 @@
+{
+  "name": "muh-bot",
+  "version": "1.0.0",
+  "description": "testo descripto",
+  "main": "bot.js",
+  "author": "saarkgit",
+  "dependencies": {}
+}
