@@ -5,7 +5,9 @@
   "main": "bot.js",
   "author": "saarkgit",
   "dependencies": {
-    "discord.io": "^2.5.3",
+    "discord.io": "github:woor/discord.io#gateway_v6",
+    "discord.js": "^11.4.2",
+    "jshint": "^2.9.7",
     "winston": "3.1.0"
   }
 }
