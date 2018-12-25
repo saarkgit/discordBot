@@ -25,7 +25,10 @@ client.on("message", message => {
             message.channel.send("Meh.");
             break;
         case "asl":
-            let [commandName, age, sex, ...location] = command;
+            console.log(command);
+            var updatedCommand = command[1].toString().split(/\//g);
+            console.log(updatedCommand);
+            let [age, sex, ...location] = updatedCommand;
             switch (sex) {
                 case 'm':
                     sex = 'male';
