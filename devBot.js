@@ -3,37 +3,48 @@ const client = new Discord.Client();
 const auth = require('./auth.json');
 const prefix = "!";
 
-client.on("message", (message) => {
-    // Exit and stop if not a bot command
-    if (!message.content.startsWith(prefix) || message.author.bot)
+client.on("message", message => {
+    // Don't reply to other bots (not even yourself)
+    if (message.author.bot)
         return;
 
-    if (message.content.startsWith(prefix + "ping")) {
-        message.channel.send("pong!");
-    }
-    else if (message.content.startsWith(prefix + "foo")) {
-        message.channel.send("bar!");
+    // ignore the message if it isnt meant for us
+    if (message.content.indexOf(prefix) !== 0)
+        return;
+
+    // parse the message past the prefix
+    const command = message.content.slice(1).trim().split(/ +/gi);
+
+    // const command = args.shift().toLowerCase(); // the regex above should do the same thing
+    // console.log(command);
+    switch (command[0]) {
+        case 'ping':
+            message.channel.send("Pong!");
+            break;
+        case "blah":
+            message.channel.send("Meh.");
+            break;
+        case "asl":
+            let [commandName, age, sex, ...location] = command;
+            switch (sex) {
+                case 'm':
+                    sex = 'male';
+                    break;
+                case 'f':
+                    sex = 'female';
+                    break;
+            }
+            var updatedLocation = location.toString().replace(/,/g, " ");
+            if (age >= 18)
+                message.channel.send(`Hello <@${message.author.id}>, I see you're a ${age} year old ${sex} from ${updatedLocation}. Wanna smash?`);
+            else 
+                message.channel.send(`Hello <@${message.author.id}>, I see you're a ${age} year old ${sex} from ${updatedLocation}. It's very nice to meet you!`);
+            break;
+        default:
+            message.channel.send("How'd you get here?");
     }
 });
 
-
-
-
-/*client.on('ready', () => {
-    // List servers the bot is connected to
-    console.log("Servers:");
-
-    client.guilds.forEach((guild) => {
-        console.log(" - " + guild.name);
-        // List all channels
-        guild.channels.forEach((channel) => {
-            console.log(` -- ${channel.name} (${channel.type}) - ${channel.id}`)
-        });
-    });
-    let generalChannel = client.channels.get("526622403502145558");
-    generalChannel.send("hello server");
-
-});*/
 
 
 client.login(auth.token);
