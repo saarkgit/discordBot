@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const auth = require('./auth.json');
 const asl = require('./commandsASL.js');
-const prefix = "!";
+const config = require('./config.json');
 
 client.login(auth.token);
 
@@ -12,7 +12,7 @@ client.on("message", message => {
         return;
 
     // ignore the message if it isnt meant for us
-    if (message.content.indexOf(prefix) !== 0)
+    if (message.content.indexOf(config.prefix) !== 0)
         return;
 
     // parse the message past the prefix
