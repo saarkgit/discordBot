@@ -6,6 +6,22 @@ const config = require('./config.json');
 
 client.login(auth.token);
 
+client.on("ready", () => {
+    // This event will run if the bot starts, and logs in, successfully.
+    console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`);
+
+    // info about server
+    //console.log(client.guilds.get);
+/*    for (let guild of client.guilds) {
+        console.log(guild[0]);  // guild id
+        console.log("0 ^ | 1 v")
+        console.log(guild[1]);  // ton of info
+}
+*/
+    // Example of changing the bot's playing game to something useful. `client.user` is what the
+    //client.user.setActivity(`Serving ${client.guilds.size} servers`);
+});
+
 client.on("message", message => {
     // Don't reply to other bots (not even yourself)
     if (message.author.bot)
