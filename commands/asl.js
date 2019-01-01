@@ -1,5 +1,6 @@
-module.exports.aslCommand = (message, info) => {
-    let [age, sex, ...location] = info;
+exports.run = (client, message, args) => {
+    let newArgs = args.toString().split(/\//g);
+    let [age, sex, ...location] = newArgs;
     switch (sex) {
         case 'm':
             sex = 'male';

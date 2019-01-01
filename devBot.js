@@ -1,28 +1,67 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const bot = new Discord.Client();
 const auth = require('./auth.json');
-const asl = require('./commandsASL.js');
+const fs = require('fs');
+//const asl = require('./commandsASL.js');
 const config = require('./config.json');
 
-client.login(auth.token);
+bot.login(auth.token);
 
-client.on("ready", () => {
+//get events from folder
+fs.readdir("./events/", (err, files) => {
+    if (err) return console.error(err);
+    files.forEach(file => {
+        // If the file is not a JS file, ignore it
+        if (!file.endsWith(".js")) return;
+        // Load the event file itself
+        const cmd = require(`./events/${file}`);
+        // Get just the event name from the file name
+        let eventName = file.split(".")[0];
+
+        // super-secret recipe to call events with all their proper arguments *after* the `bot` var.
+        // without going into too many details, this means each event will be called with the bot argument,
+        // followed by its "normal" arguments, like message, member, etc etc.
+        // This line is awesome by the way. Just sayin'.
+        bot.on(eventName, cmd.bind(null, bot));
+        delete require.cache[require.resolve(`./events/${file}`)];
+    });
+});
+
+bot.commands = new Map();
+
+//get commands from folder
+fs.readdir("./commands/", (err, files) => {
+    if (err) return console.error(err);
+    files.forEach(file => {
+        if (!file.endsWith(".js")) return;
+        // Load the command file itself
+        let cmds = require(`./commands/${file}`);
+        // Get just the command name from the file name
+        let commandName = file.split(".")[0];
+        console.log(`Attempting to load command ${commandName}`);
+        // Here we simply store the whole thing in the command map. We're not running it right now.
+        bot.commands.set(commandName, cmds);
+    });
+});
+
+
+bot.on("ready", () => {
     // This event will run if the bot starts, and logs in, successfully.
-    console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`);
+    console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`);
 
     // info about server
-    //console.log(client.guilds.get);
-/*    for (let guild of client.guilds) {
+    //console.log(bot.guilds.get);
+/*    for (let guild of bot.guilds) {
         console.log(guild[0]);  // guild id
         console.log("0 ^ | 1 v")
         console.log(guild[1]);  // ton of info
 }
 */
-    // Example of changing the bot's playing game to something useful. `client.user` is what the
-    //client.user.setActivity(`Serving ${client.guilds.size} servers`);
+    // Example of changing the bot's playing game to something useful. `bot.user` is what the
+    //bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
 });
 
-client.on("message", message => {
+/* bot.on("message", message => {
     // Don't reply to other bots (not even yourself)
     if (message.author.bot)
         return;
@@ -49,4 +88,4 @@ client.on("message", message => {
         default:
             message.channel.send("How'd you get here?");
     }
-});
+});*/
